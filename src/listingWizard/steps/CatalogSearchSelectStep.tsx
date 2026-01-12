@@ -5,6 +5,10 @@ import {
   CatalogProvider,
   CatalogResult,
 } from "@/listingWizard/providers/pokemonCardProvider";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 type Props = StepProps & { provider: CatalogProvider };
 
@@ -46,104 +50,96 @@ export function CatalogSearchSelectStep({
   }
 
   return (
-    <div className="space-y-4">
-      <div className="text-lg font-semibold">{provider.label}</div>
+    <Card>
+      <CardHeader>
+        <CardTitle>{provider.label}</CardTitle>
+      </CardHeader>
+      <CardContent className="space-y-4">
+        <div className="flex gap-2">
+          <Input
+            placeholder="Search…"
+            value={term}
+            onChange={(e) => setTerm(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") runSearch(1);
+            }}
+          />
+          <Button type="button" onClick={() => runSearch(1)} disabled={loading}>
+            Search
+          </Button>
+        </div>
 
-      <div className="flex gap-2">
-        <input
-          className="border rounded px-3 py-2 w-full"
-          placeholder="Search…"
-          value={term}
-          onChange={(e) => setTerm(e.target.value)}
-          onKeyDown={(e) => {
-            if (e.key === "Enter") runSearch(1);
-          }}
-        />
-        <button
-          type="button"
-          className="px-4 py-2 rounded bg-black text-white"
-          onClick={() => runSearch(1)}
-          disabled={loading}
-        >
-          Search
-        </button>
-      </div>
+        {loading && <div className="text-sm">Loading…</div>}
 
-      {loading && <div className="text-sm">Loading…</div>}
-
-      <div className="border rounded">
-        {results.length === 0 ? (
-          <div className="p-3 text-sm text-gray-600">No results yet.</div>
-        ) : (
-          <ul className="divide-y">
-            {results.map((r) => {
-              const active = r.id === selectedId;
-              return (
-                <li
-                  key={r.id}
-                  className="p-3 flex items-center justify-between gap-3"
-                >
-                  <div className="min-w-0">
-                    <div
-                      className={`truncate ${active ? "font-semibold" : ""}`}
+        <Card>
+          <ScrollArea className="h-[300px]">
+            {results.length === 0 ? (
+              <div className="p-3 text-sm text-gray-600">No results yet.</div>
+            ) : (
+              <ul className="divide-y">
+                {results.map((r) => {
+                  const active = r.id === selectedId;
+                  return (
+                    <li
+                      key={r.id}
+                      className="p-3 flex items-center justify-between gap-3 hover:bg-gray-50"
                     >
-                      {r.name}
-                    </div>
-                    {(r.setId || r.number) && (
-                      <div className="text-xs text-gray-600">
-                        {r.setId ?? ""} {r.number ? `#${r.number}` : ""}
+                      <div className="min-w-0">
+                        <div
+                          className={`truncate ${
+                            active ? "font-semibold" : ""
+                          }`}
+                        >
+                          {r.name}
+                        </div>
+                        {(r.setId || r.number) && (
+                          <div className="text-xs text-gray-600">
+                            {r.setId ?? ""} {r.number ? `#${r.number}` : ""}
+                          </div>
+                        )}
                       </div>
-                    )}
-                  </div>
-                  <button
-                    type="button"
-                    className={`px-3 py-2 rounded border ${
-                      active ? "font-bold" : ""
-                    }`}
-                    onClick={() => selectItem(r)}
-                  >
-                    {active ? "Selected" : "Select"}
-                  </button>
-                </li>
-              );
-            })}
-          </ul>
+                      <Button
+                        type="button"
+                        variant={active ? "default" : "outline"}
+                        size="sm"
+                        onClick={() => selectItem(r)}
+                      >
+                        {active ? "Selected" : "Select"}
+                      </Button>
+                    </li>
+                  );
+                })}
+              </ul>
+            )}
+          </ScrollArea>
+        </Card>
+
+        {hasMore && (
+          <Button
+            type="button"
+            variant="outline"
+            onClick={() => runSearch(page + 1)}
+            disabled={loading}
+          >
+            Load more
+          </Button>
         )}
-      </div>
 
-      {hasMore && (
-        <button
-          type="button"
-          className="px-4 py-2 rounded border"
-          onClick={() => runSearch(page + 1)}
-          disabled={loading}
-        >
-          Load more
-        </button>
-      )}
+        {errors["catalogSelection.catalogId"] && (
+          <p className="text-sm text-red-600">
+            {errors["catalogSelection.catalogId"]}
+          </p>
+        )}
 
-      {errors["catalogSelection.catalogId"] && (
-        <p className="text-sm text-red-600">
-          {errors["catalogSelection.catalogId"]}
-        </p>
-      )}
-
-      <div className="flex gap-2 pt-2">
-        <button
-          type="button"
-          className="px-4 py-2 rounded border"
-          onClick={goBack}
-        >
-          Back
-        </button>
-        <button
-          type="button"
-          className="px-4 py-2 rounded bg-black text-white"
-          onClick={goNext}
-        >
-          Next
-        </button>
-      </div>
-    </div>
+        <div className="flex gap-2 pt-4">
+          <Button type="button" variant="outline" onClick={goBack}>
+            Back
+          </Button>
+          <Button type="button" onClick={goNext}>
+            Next
+          </Button>
+        </div>
+      </CardContent>
+    </Card>
   );
 }

@@ -66,6 +66,7 @@ export type StepProps = {
   goNext: () => void;
   goBack: () => void;
   goTo: (id: StepId) => void;
+  validateAll?: () => boolean;
 };
 
 export type StepConfig = {

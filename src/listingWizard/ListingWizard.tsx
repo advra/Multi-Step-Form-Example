@@ -3,6 +3,7 @@
 // src/features/listingWizard/ListingWizard.tsx
 import type { ListingDraft, WizardMode } from "@/listingWizard/types";
 import { useMultiListingForm } from "@/listingWizard/wizard/useMultiListingForm";
+import { Button } from "@/components/ui/button";
 
 type Props = {
   mode: WizardMode;
@@ -21,16 +22,15 @@ export function ListingWizard({ mode, initialDraft }: Readonly<Props>) {
         {wizard.steps.map((s, idx) => {
           const active = s.id === wizard.currentStepId;
           return (
-            <button
+            <Button
               key={s.id}
               type="button"
-              className={`text-sm px-3 py-2 rounded border ${
-                active ? "font-bold" : ""
-              }`}
+              variant={active ? "default" : "outline"}
+              size="sm"
               onClick={() => wizard.goTo(s.id)}
             >
               {idx + 1}. {s.title}
-            </button>
+            </Button>
           );
         })}
       </div>
@@ -43,6 +43,7 @@ export function ListingWizard({ mode, initialDraft }: Readonly<Props>) {
           goNext={wizard.goNext}
           goBack={wizard.goBack}
           goTo={wizard.goTo}
+          validateAll={wizard.validateAll}
         />
       </div>
 

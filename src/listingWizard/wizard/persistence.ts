@@ -5,6 +5,7 @@ const COOKIE_KEY = "listing_draft_v1";
 const LS_KEY = "listing_draft_v1_local";
 
 function setCookie(name: string, value: string, days = 7) {
+  if (typeof window === 'undefined') return;
   const expires = new Date(Date.now() + days * 864e5).toUTCString();
   document.cookie = `${name}=${encodeURIComponent(
     value
@@ -12,11 +13,13 @@ function setCookie(name: string, value: string, days = 7) {
 }
 
 function getCookie(name: string): string | null {
+  if (typeof window === 'undefined') return null;
   const match = document.cookie.match(new RegExp("(^| )" + name + "=([^;]+)"));
   return match ? decodeURIComponent(match[2]) : null;
 }
 
 function deleteCookie(name: string) {
+  if (typeof window === 'undefined') return;
   document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/; SameSite=Lax`;
 }
 
@@ -33,6 +36,7 @@ function safeJsonParse<T>(s: string | null): T | null {
 const MAX_COOKIE_BYTES = 3500;
 
 export function loadDraft(): ListingDraft | null {
+  if (typeof window === 'undefined') return null;
   const fromCookie = safeJsonParse<ListingDraft>(getCookie(COOKIE_KEY));
   if (fromCookie) return fromCookie;
 
@@ -41,6 +45,7 @@ export function loadDraft(): ListingDraft | null {
 }
 
 export function saveDraft(draft: ListingDraft) {
+  if (typeof window === 'undefined') return;
   const payload = JSON.stringify(draft);
   const bytes = new TextEncoder().encode(payload).length;
 
@@ -60,6 +65,7 @@ export function saveDraft(draft: ListingDraft) {
 }
 
 export function clearDraft() {
+  if (typeof window === 'undefined') return;
   deleteCookie(COOKIE_KEY);
   localStorage.removeItem(LS_KEY);
 }

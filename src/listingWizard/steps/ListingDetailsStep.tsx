@@ -1,6 +1,19 @@
 // src/features/listingWizard/steps/ListingDetailsStep.tsx
 import * as React from "react";
 import type { StepProps } from "@/listingWizard/types";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 export function ListingDetailsStep({
   draft,
@@ -25,128 +38,125 @@ export function ListingDetailsStep({
   }
 
   return (
-    <div className="space-y-4">
-      <div className="text-lg font-semibold">Listing details</div>
-
-      <div className="space-y-2">
-        <label className="block text-sm">Title</label>
-        <input
-          className="border rounded px-3 py-2 w-full"
-          value={ld.title ?? ""}
-          onChange={(e) => setField("title", e.target.value)}
-        />
-        {errors["listingDetails.title"] && (
-          <p className="text-sm text-red-600">
-            {errors["listingDetails.title"]}
-          </p>
-        )}
-      </div>
-
-      <div className="space-y-2">
-        <label className="block text-sm">Price</label>
-        <input
-          className="border rounded px-3 py-2 w-full"
-          inputMode="decimal"
-          value={ld.price ?? ""}
-          onChange={(e) =>
-            setField(
-              "price",
-              e.target.value === "" ? undefined : Number(e.target.value)
-            )
-          }
-        />
-        {errors["listingDetails.price"] && (
-          <p className="text-sm text-red-600">
-            {errors["listingDetails.price"]}
-          </p>
-        )}
-      </div>
-
-      <div className="space-y-2">
-        <label className="block text-sm">Condition</label>
-        <select
-          className="border rounded px-3 py-2 w-full"
-          value={ld.condition ?? ""}
-          onChange={(e) => setField("condition", e.target.value)}
-        >
-          <option value="">Select…</option>
-          <option value="NM">Near Mint</option>
-          <option value="LP">Lightly Played</option>
-          <option value="MP">Moderately Played</option>
-          <option value="HP">Heavily Played</option>
-          <option value="DMG">Damaged</option>
-        </select>
-        {errors["listingDetails.condition"] && (
-          <p className="text-sm text-red-600">
-            {errors["listingDetails.condition"]}
-          </p>
-        )}
-      </div>
-
-      <div className="space-y-2">
-        <label className="inline-flex items-center gap-2">
-          <input
-            type="checkbox"
-            checked={!!ld.graded}
-            onChange={(e) => setField("graded", e.target.checked)}
+    <Card>
+      <CardHeader>
+        <CardTitle>Listing details</CardTitle>
+      </CardHeader>
+      <CardContent className="space-y-4">
+        <div className="space-y-2">
+          <Label htmlFor="title">Title</Label>
+          <Input
+            id="title"
+            value={ld.title ?? ""}
+            onChange={(e) => setField("title", e.target.value)}
           />
-          Graded
-        </label>
-      </div>
+          {errors["listingDetails.title"] && (
+            <p className="text-sm text-red-600">
+              {errors["listingDetails.title"]}
+            </p>
+          )}
+        </div>
 
-      <div className="space-y-2">
-        <label className="block text-sm">Images (IDs)</label>
-        <input
-          className="border rounded px-3 py-2 w-full"
-          placeholder="comma-separated media IDs"
-          value={(ld.images ?? []).join(",")}
-          onChange={(e) =>
-            setField(
-              "images",
-              e.target.value
-                .split(",")
-                .map((s) => s.trim())
-                .filter(Boolean)
-            )
-          }
-        />
-        {errors["listingDetails.images"] && (
-          <p className="text-sm text-red-600">
-            {errors["listingDetails.images"]}
-          </p>
-        )}
-      </div>
+        <div className="space-y-2">
+          <Label htmlFor="price">Price</Label>
+          <Input
+            id="price"
+            inputMode="decimal"
+            value={ld.price ?? ""}
+            onChange={(e) =>
+              setField(
+                "price",
+                e.target.value === "" ? undefined : Number(e.target.value)
+              )
+            }
+          />
+          {errors["listingDetails.price"] && (
+            <p className="text-sm text-red-600">
+              {errors["listingDetails.price"]}
+            </p>
+          )}
+        </div>
 
-      <div className="space-y-2">
-        <label className="block text-sm">Description</label>
-        <textarea
-          className="border rounded px-3 py-2 w-full min-h-[120px]"
-          value={ld.description ?? ""}
-          onChange={(e) => setField("description", e.target.value)}
-        />
-        {errors["listingDetails.description"] && (
-          <p className="text-sm text-red-600">
-            {errors["listingDetails.description"]}
-          </p>
-        )}
-      </div>
+        <div className="space-y-2">
+          <Label htmlFor="condition">Condition</Label>
+          <Select
+            value={ld.condition ?? ""}
+            onValueChange={(value) => setField("condition", value)}
+          >
+            <SelectTrigger id="condition">
+              <SelectValue placeholder="Select condition" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="NM">Near Mint</SelectItem>
+              <SelectItem value="LP">Lightly Played</SelectItem>
+              <SelectItem value="MP">Moderately Played</SelectItem>
+              <SelectItem value="HP">Heavily Played</SelectItem>
+              <SelectItem value="DMG">Damaged</SelectItem>
+            </SelectContent>
+          </Select>
+          {errors["listingDetails.condition"] && (
+            <p className="text-sm text-red-600">
+              {errors["listingDetails.condition"]}
+            </p>
+          )}
+        </div>
 
-      <div className="flex gap-2 pt-2">
-        <button
-          type="button"
-          className="px-4 py-2 rounded border"
-          onClick={goBack}
-        >
-          Back
-        </button>
-        <button
-          type="button"
-          className="px-4 py-2 rounded bg-black text-white"
-          onClick={goNext}
-        >
-          Next
-        </button>
-      </div>
-    </div>
+        <div className="flex items-center space-x-2">
+          <Checkbox
+            id="graded"
+            checked={!!ld.graded}
+            onCheckedChange={(checked) => setField("graded", checked)}
+          />
+          <Label htmlFor="graded">Graded</Label>
+        </div>
+
+        <div className="space-y-2">
+          <Label htmlFor="images">Images (IDs)</Label>
+          <Input
+            id="images"
+            placeholder="comma-separated media IDs"
+            value={(ld.images ?? []).join(",")}
+            onChange={(e) =>
+              setField(
+                "images",
+                e.target.value
+                  .split(",")
+                  .map((s) => s.trim())
+                  .filter(Boolean)
+              )
+            }
+          />
+          {errors["listingDetails.images"] && (
+            <p className="text-sm text-red-600">
+              {errors["listingDetails.images"]}
+            </p>
+          )}
+        </div>
+
+        <div className="space-y-2">
+          <Label htmlFor="description">Description</Label>
+          <Textarea
+            id="description"
+            className="min-h-[120px]"
+            value={ld.description ?? ""}
+            onChange={(e) => setField("description", e.target.value)}
+          />
+          {errors["listingDetails.description"] && (
+            <p className="text-sm text-red-600">
+              {errors["listingDetails.description"]}
+            </p>
+          )}
+        </div>
+
+        <div className="flex gap-2 pt-4">
+          <Button type="button" variant="outline" onClick={goBack}>
+            Back
+          </Button>
+          <Button type="button" onClick={goNext}>
+            Next
+          </Button>
+        </div>
+      </CardContent>
+    </Card>
   );
 }

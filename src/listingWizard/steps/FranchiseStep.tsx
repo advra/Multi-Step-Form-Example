@@ -1,5 +1,7 @@
 // src/app/listingWizard/steps/FranchiseStep.tsx
 import type { Franchise, StepProps } from "@/listingWizard/types";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 export function FranchiseStep({
   draft,
@@ -14,43 +16,40 @@ export function FranchiseStep({
   }
 
   return (
-    <div className="space-y-4">
-      <div className="text-lg font-semibold">Choose a franchise</div>
+    <Card>
+      <CardHeader>
+        <CardTitle>Choose a franchise</CardTitle>
+      </CardHeader>
+      <CardContent className="space-y-4">
+        <div className="flex gap-3">
+          <Button
+            type="button"
+            variant={franchise === "pokemon" ? "default" : "outline"}
+            className="flex-1"
+            onClick={() => select("pokemon")}
+          >
+            Pokémon
+          </Button>
+          <Button
+            type="button"
+            variant={franchise === "yugioh" ? "default" : "outline"}
+            className="flex-1"
+            onClick={() => select("yugioh")}
+          >
+            Yu-Gi-Oh!
+          </Button>
+        </div>
 
-      <div className="flex gap-3">
-        <button
-          type="button"
-          className={`px-4 py-2 rounded border ${
-            franchise === "pokemon" ? "font-bold" : ""
-          }`}
-          onClick={() => select("pokemon")}
-        >
-          Pokémon
-        </button>
-        <button
-          type="button"
-          className={`px-4 py-2 rounded border ${
-            franchise === "yugioh" ? "font-bold" : ""
-          }`}
-          onClick={() => select("yugioh")}
-        >
-          Yu-Gi-Oh!
-        </button>
-      </div>
+        {errors["franchise"] && (
+          <p className="text-sm text-red-600">{errors["franchise"]}</p>
+        )}
 
-      {errors["franchise"] && (
-        <p className="text-sm text-red-600">{errors["franchise"]}</p>
-      )}
-
-      <div className="pt-2">
-        <button
-          type="button"
-          className="px-4 py-2 rounded bg-black text-white"
-          onClick={goNext}
-        >
-          Next
-        </button>
-      </div>
-    </div>
+        <div className="pt-4">
+          <Button type="button" onClick={goNext}>
+            Next
+          </Button>
+        </div>
+      </CardContent>
+    </Card>
   );
 }

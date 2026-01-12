@@ -2,6 +2,8 @@
 import * as React from "react";
 import type { StepProps } from "@/listingWizard/types";
 import { reviewSections } from "@/listingWizard/review/reviewSections";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 export function ReviewStep({
   draft,
@@ -17,44 +19,39 @@ export function ReviewStep({
         {reviewSections
           .filter((s) => s.isVisible(draft))
           .map((section) => (
-            <div key={section.key} className="border rounded p-4 space-y-2">
-              <div className="flex items-center justify-between">
-                <div className="font-semibold">{section.title}</div>
-                <button
+            <Card key={section.key}>
+              <CardHeader className="flex flex-row items-center justify-between">
+                <CardTitle className="text-lg">{section.title}</CardTitle>
+                <Button
                   type="button"
-                  className="text-sm underline"
+                  variant="ghost"
+                  size="sm"
                   onClick={() => goTo(section.editStepId(draft))}
                 >
                   Edit
-                </button>
-              </div>
-
-              <div className="text-sm space-y-1">
+                </Button>
+              </CardHeader>
+              <CardContent className="space-y-2">
                 {section.rows(draft).map((row) => (
                   <div key={row.label} className="flex gap-2">
                     <div className="w-40 text-gray-600">{row.label}</div>
                     <div className="flex-1">{row.value}</div>
                   </div>
                 ))}
-              </div>
-            </div>
+              </CardContent>
+            </Card>
           ))}
       </div>
 
-      <div className="flex gap-2 pt-2">
-        <button
-          type="button"
-          className="px-4 py-2 rounded border"
-          onClick={goBack}
-        >
+      <div className="flex gap-2 pt-4">
+        <Button type="button" variant="outline" onClick={goBack}>
           Back
-        </button>
+        </Button>
 
-        <button
+        <Button
           type="button"
-          className="px-4 py-2 rounded bg-black text-white"
           onClick={() => {
-            const ok = validateAll();
+            const ok = validateAll?.();
             if (!ok) {
               // optionally jump to first invalid step, but simplest is to let errors show in steps
               return;
@@ -64,7 +61,7 @@ export function ReviewStep({
           }}
         >
           Submit
-        </button>
+        </Button>
       </div>
     </div>
   );
