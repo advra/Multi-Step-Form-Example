@@ -4,6 +4,7 @@
 import type { ListingDraft, WizardMode } from "@/listingWizard/types";
 import { useMultiListingForm } from "@/listingWizard/wizard/useMultiListingForm";
 import { Button } from "@/components/ui/button";
+import { useEffect } from "react";
 
 type Props = {
   mode: WizardMode;
@@ -15,8 +16,14 @@ export function ListingWizard({ mode, initialDraft }: Readonly<Props>) {
 
   const Step = wizard.currentStep.Component;
 
+  useEffect(() => {
+    console.log(
+      `Wizard Mode: ${wizard.draft.mode} Version: ${wizard.draft.version}`,
+    );
+  }, [wizard.draft.mode, wizard.draft.version]);
+
   return (
-    <div className="max-w-2xl mx-auto p-6 space-y-4">
+    <div className="container mx-auto p-6 space-y-4">
       {/* Progress / step tabs */}
       <div className="flex flex-wrap gap-2">
         {wizard.steps.map((s, idx) => {
@@ -29,13 +36,13 @@ export function ListingWizard({ mode, initialDraft }: Readonly<Props>) {
               size="sm"
               onClick={() => wizard.goTo(s.id)}
             >
-              {idx + 1}. {s.title}
+              Step {idx + 1} {active && s.title}
             </Button>
           );
         })}
       </div>
 
-      <div className="border rounded p-5">
+      <div>
         <Step
           draft={wizard.draft}
           setDraft={wizard.setDraft}
@@ -45,11 +52,6 @@ export function ListingWizard({ mode, initialDraft }: Readonly<Props>) {
           goTo={wizard.goTo}
           validateAll={wizard.validateAll}
         />
-      </div>
-
-      <div className="text-xs text-gray-600">
-        Draft mode: <span className="font-mono">{wizard.draft.mode}</span> •
-        version: <span className="font-mono">{wizard.draft.version}</span>
       </div>
     </div>
   );

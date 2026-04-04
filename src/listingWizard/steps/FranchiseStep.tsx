@@ -44,8 +44,8 @@ export function FranchiseStep({
           <p className="text-sm text-red-600">{errors["franchise"]}</p>
         )}
 
-        <div className="pt-4">
-          <Button type="button" onClick={goNext}>
+        <div className="flex w-full pt-4">
+          <Button className="ml-auto" onClick={goNext}>
             Next
           </Button>
         </div>

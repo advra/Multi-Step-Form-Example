@@ -47,11 +47,11 @@ export function ProductStep({
           <p className="text-sm text-red-600">{errors["productType"]}</p>
         )}
 
-        <div className="flex gap-2 pt-4">
-          <Button type="button" variant="outline" onClick={goBack}>
+        <div className="flex w-full pt-4">
+          <Button variant="outline" onClick={goBack}>
             Back
           </Button>
-          <Button type="button" onClick={goNext}>
+          <Button className="ml-auto" onClick={goNext}>
             Next
           </Button>
         </div>

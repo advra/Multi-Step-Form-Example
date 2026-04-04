@@ -26,7 +26,7 @@ export function ListingDetailsStep({
 
   function setField<K extends keyof NonNullable<typeof draft.listingDetails>>(
     key: K,
-    value: unknown
+    value: unknown,
   ) {
     setDraft((prev) => ({
       ...prev,
@@ -66,7 +66,7 @@ export function ListingDetailsStep({
             onChange={(e) =>
               setField(
                 "price",
-                e.target.value === "" ? undefined : Number(e.target.value)
+                e.target.value === "" ? undefined : Number(e.target.value),
               )
             }
           />
@@ -122,7 +122,7 @@ export function ListingDetailsStep({
                 e.target.value
                   .split(",")
                   .map((s) => s.trim())
-                  .filter(Boolean)
+                  .filter(Boolean),
               )
             }
           />
@@ -148,11 +148,11 @@ export function ListingDetailsStep({
           )}
         </div>
 
-        <div className="flex gap-2 pt-4">
-          <Button type="button" variant="outline" onClick={goBack}>
+        <div className="flex w-full pt-4">
+          <Button variant="outline" onClick={goBack}>
             Back
           </Button>
-          <Button type="button" onClick={goNext}>
+          <Button className="ml-auto" onClick={goNext}>
             Next
           </Button>
         </div>
